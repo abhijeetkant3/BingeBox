@@ -1,0 +1,254 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-black text-white antialiased;
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+  }
+}
+
+/* Custom Animations */
+@keyframes fadeIn {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.3s ease-out forwards;
+}
+
+@keyframes fadeZoom {
+  0% { opacity: 0; transform: scale(0.95); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+.animate-fadeZoom {
+  animation: fadeZoom 0.8s ease-out forwards;
+}
+
+/* Glassmorphism Utility */
+.glass {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #121212;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #ef4444; /* red-500 */
+  border-radius: 10px;
+}
+
+/* Mesh Background Gradient */
+.mesh-gradient {
+  background-color: #000000;
+  background-image:
+    radial-gradient(at 0% 0%, hsla(0, 100%, 20%, 0.5) 0px, transparent 50%),
+    radial-gradient(at 100% 0%, hsla(0, 100%, 10%, 0.5) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, hsla(0, 0%, 0%, 1) 0px, transparent 50%);
+}
+
+/* Movie Card Glow Effect */
+.movie-card-effect {
+  z-index: 1;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+}
+
+.movie-card-effect:hover {
+  z-index: 50;
+  box-shadow: 0 0 40px 10px rgba(220, 38, 38, 0.4) !important;
+  transform: translateY(-10px) scale(1.05) !important;
+}
+
+.movie-card-effect::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -150%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transform: skewX(-20deg);
+  transition: 0.6s;
+  z-index: 20;
+  pointer-events: none;
+}
+
+.movie-card-effect:hover::after {
+  left: 150%;
+}
+
+/* Modal Neon Glow */
+.neon-glow-red {
+  border: 1px solid rgba(220, 38, 38, 0.5);
+  box-shadow: 
+    0 0 8px rgba(220, 38, 38, 0.4),  
+    0 0 20px rgba(220, 38, 38, 0.3),
+    0 0 40px rgba(220, 38, 38, 0.2);
+}
+
+/* RGB Moving Border for the Close Button */
+.rgb-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  overflow: hidden;
+  padding: 2px;
+}
+
+.rgb-container::before {
+  content: "";
+  position: absolute;
+  width: 150%;
+  height: 150%;
+  background: conic-gradient(#dc2626, #ef4444, #991b1b, #450a0a, #dc2626);
+  animation: rotate-rgb 3s linear infinite;
+}
+
+.rgb-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: #1a1a1a;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+  color: white;
+  transition: background 0.3s;
+}
+
+@keyframes rotate-rgb {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Rotating Profile Ring */
+.profile-ring-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.profile-ring-container::before {
+  content: "";
+  position: absolute;
+  width: 160%;
+  height: 160%;
+  background: conic-gradient(
+    #facc15, 
+    #dc2626, 
+    #f87171, 
+    #fbbf24, 
+    #facc15
+  );
+  animation: rotate-rgb 3s linear infinite;
+}
+
+.profile-ring-inner {
+  position: relative;
+  width: 41.5px;
+  height: 41.5px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+}
+
+/* Rotating Search Ring (Continuous Neon Tube Effect) */
+.search-ring-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  border-radius: 9999px;
+  padding: 1.5px; /* Thin, elegant ring thickness */
+  overflow: hidden;
+  transition: transform 0.3s ease, width 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s ease;
+  background: transparent;
+  will-change: transform, width;
+}
+
+.search-ring-container.active {
+  box-shadow: 0 0 20px rgba(161, 98, 7, 0.4);
+}
+
+.search-ring-container::before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: conic-gradient(
+    transparent, 
+    #451a03, 
+    #ca8a04, 
+    #78350f, 
+    #facc15, 
+    #451a03,
+    transparent 30%
+  );
+  animation: rotate-rgb 4s linear infinite;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  will-change: opacity;
+}
+
+.search-ring-container.active::before {
+  opacity: 1;
+}
+
+.search-ring-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 9999px;
+  background: #000; /* Pure black core for contrast */
+  display: flex;
+  align-items: center;
+  z-index: 1;
+  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.3s ease;
+  will-change: width;
+}
+
+.shimmer {
+  position: relative;
+  overflow: hidden;
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.shimmer::after {
+  content: "";
+  position: absolute;
+  top: 0; right: 0; bottom: 0; left: 0;
+  transform: translateX(-100%);
+  background-image: linear-gradient(90deg, rgba(255, 255, 255, 0) 0, rgba(255, 255, 255, 0.05) 20%, rgba(255, 255, 255, 0.1) 60%, rgba(255, 255, 255, 0));
+  animation: shimmer-swipe 2s infinite;
+}
+
+@keyframes shimmer-swipe { to { transform: translateX(100%); } }
+@keyframes shimmer { 100% { transform: translateX(100%); } }
+
