@@ -212,8 +212,6 @@ function Home({ user }) {
 
 function App() {
   const [user, setUser] = useState(null);
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
-  const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -221,24 +219,6 @@ function App() {
     });
     return () => unsubscribe();
   }, []);
-
-  useEffect(() => {
-    const handleMouseMove = (e) => setMousePos({ x: e.clientX, y: e.clientY });
-    window.addEventListener("mousemove", handleMouseMove);
-    return () => window.removeEventListener("mousemove", handleMouseMove);
-  }, []);
-
-  useEffect(() => {
-    const speed = 0.15;
-    const followMouse = () => {
-      setCursorPos(prev => ({
-        x: prev.x + (mousePos.x - prev.x) * speed,
-        y: prev.y + (mousePos.y - prev.y) * speed,
-      }));
-    };
-    const animationFrame = requestAnimationFrame(followMouse);
-    return () => cancelAnimationFrame(animationFrame);
-  }, [mousePos]);
 
   return (
     <BrowserRouter>

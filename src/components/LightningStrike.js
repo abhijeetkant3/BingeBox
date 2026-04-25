@@ -1,77 +1,77 @@
 import React, { useEffect, useRef, useState, memo } from 'react';
 
+const drawSegment = (ctx, x1, y1, x2, y2, thickness, intensity = 1) => {
+  // Outer glow
+  ctx.beginPath();
+  ctx.moveTo(x1, y1);
+  ctx.lineTo(x2, y2);
+  ctx.strokeStyle = `rgba(0, 191, 255, ${0.1 * intensity})`;
+  ctx.lineWidth = thickness * 6;
+  ctx.stroke();
+
+  // Inner glow
+  ctx.beginPath();
+  ctx.moveTo(x1, y1);
+  ctx.lineTo(x2, y2);
+  ctx.strokeStyle = `rgba(173, 216, 230, ${0.4 * intensity})`;
+  ctx.lineWidth = thickness * 2.5;
+  ctx.stroke();
+
+  // Core
+  ctx.beginPath();
+  ctx.moveTo(x1, y1);
+  ctx.lineTo(x2, y2);
+  ctx.strokeStyle = `rgba(255,255,255,${intensity})`;
+  ctx.lineWidth = thickness;
+  ctx.stroke();
+};
+
+const createBolt = (ctx, x1, y1, x2, y2, thickness, depth) => {
+  if (depth <= 0) return;
+
+  const segments = 10;
+  let currX = x1;
+  let currY = y1;
+
+  for (let i = 0; i < segments; i++) {
+    const nextX =
+      currX +
+      (x2 - x1) / segments +
+      (Math.random() - 0.5) * (depth * 15);
+
+    const nextY =
+      currY +
+      (y2 - y1) / segments +
+      Math.random() * (depth * 10);
+
+    drawSegment(
+      ctx,
+      currX,
+      currY,
+      nextX,
+      nextY,
+      thickness,
+      0.8 + Math.random() * 0.4
+    );
+
+    if (Math.random() < 0.2 && depth > 8) {
+      const branchAngle = (Math.random() - 0.5) * Math.PI / 2;
+      const length = Math.random() * 120;
+      const branchX = nextX + Math.cos(branchAngle) * length;
+      const branchY = nextY + Math.sin(branchAngle) * length;
+      createBolt(ctx, nextX, nextY, branchX, branchY, thickness * 0.5, depth - 2);
+    }
+
+    currX = nextX;
+    currY = nextY;
+  }
+};
+
 const LightningStrike = memo(() => {
   const canvasRef = useRef(null);
   const [flash, setFlash] = useState(false);
   const animationFrameRef = useRef(null);
   const timeoutRef = useRef(null);
-
-  const drawSegment = (ctx, x1, y1, x2, y2, thickness, intensity = 1) => {
-    // Outer glow
-    ctx.beginPath();
-    ctx.moveTo(x1, y1);
-    ctx.lineTo(x2, y2);
-    ctx.strokeStyle = `rgba(0, 191, 255, ${0.1 * intensity})`;
-    ctx.lineWidth = thickness * 6;
-    ctx.stroke();
-
-    // Inner glow
-    ctx.beginPath();
-    ctx.moveTo(x1, y1);
-    ctx.lineTo(x2, y2);
-    ctx.strokeStyle = `rgba(173, 216, 230, ${0.4 * intensity})`;
-    ctx.lineWidth = thickness * 2.5;
-    ctx.stroke();
-
-    // Core
-    ctx.beginPath();
-    ctx.moveTo(x1, y1);
-    ctx.lineTo(x2, y2);
-    ctx.strokeStyle = `rgba(255,255,255,${intensity})`;
-    ctx.lineWidth = thickness;
-    ctx.stroke();
-  };
-
-  const createBolt = (ctx, x1, y1, x2, y2, thickness, depth) => {
-    if (depth <= 0) return;
-
-    const segments = 10;
-    let currX = x1;
-    let currY = y1;
-
-    for (let i = 0; i < segments; i++) {
-      const nextX =
-        currX +
-        (x2 - x1) / segments +
-        (Math.random() - 0.5) * (depth * 15);
-
-      const nextY =
-        currY +
-        (y2 - y1) / segments +
-        Math.random() * (depth * 10);
-
-      drawSegment(
-        ctx,
-        currX,
-        currY,
-        nextX,
-        nextY,
-        thickness,
-        0.8 + Math.random() * 0.4
-      );
-
-      if (Math.random() < 0.2 && depth > 8) {
-        const branchAngle = (Math.random() - 0.5) * Math.PI / 2;
-        const length = Math.random() * 120;
-        const branchX = nextX + Math.cos(branchAngle) * length;
-        const branchY = nextY + Math.sin(branchAngle) * length;
-        createBolt(ctx, nextX, nextY, branchX, branchY, thickness * 0.5, depth - 2);
-      }
-
-      currX = nextX;
-      currY = nextY;
-    }
-  };
 
   useEffect(() => {
     const canvas = canvasRef.current;

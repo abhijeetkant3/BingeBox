@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { watchlistService } from "../services/watchlistService";
 import MovieRow from "../components/MovieRow";
-import MovieSkeleton from "../components/MovieSkeleton";
 import { auth } from "../firebase";
 import { onAuthStateChanged } from "firebase/auth";
 
