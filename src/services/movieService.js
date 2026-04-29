@@ -41,29 +41,51 @@ export const movieService = {
     }
   },
 
-  // Fetch trailer/video info from TMDB
-  getTrailer: async (title, year) => {
+  // Fetch trailer/video info from TMDB using IMDb ID (more reliable)
+  getTrailer: async (imdbID) => {
     try {
-      const searchRes = await axios.get(`${tmdbBaseUrl}search/movie`, {
+      if (!imdbID) return null;
+
+      // 1. Find TMDB entry using IMDb ID
+      const findRes = await axios.get(`${tmdbBaseUrl}find/${imdbID}`, {
         params: {
           api_key: TMDB_API_KEY,
-          query: title,
-          year: year
-        }
+          external_source: 'imdb_id'
+        },
+        timeout: 5000
       });
 
-      const movie = searchRes.data.results?.[0];
-      if (movie) {
-        const videoRes = await axios.get(`${tmdbBaseUrl}movie/${movie.id}/videos`, {
-          params: { api_key: TMDB_API_KEY }
+      const movie = findRes.data.movie_results?.[0];
+      const tv = findRes.data.tv_results?.[0];
+      
+      let type = movie ? 'movie' : (tv ? 'tv' : null);
+      let id = movie ? movie.id : (tv ? tv.id : null);
+
+      if (id && type) {
+        // 2. Fetch videos for the found entry
+        const videoRes = await axios.get(`${tmdbBaseUrl}${type}/${id}/videos`, {
+          params: { api_key: TMDB_API_KEY },
+          timeout: 5000
         });
 
-        const trailer = videoRes.data.results?.find(vid => vid.type === 'Trailer' && vid.site === 'YouTube');
-        if (trailer) return `https://www.youtube.com/watch?v=${trailer.key}`;
+        const videos = videoRes.data.results || [];
+        
+        // 3. Smart trailer selection
+        const trailer = 
+          videos.find(v => v.type === 'Trailer' && v.site === 'YouTube') ||
+          videos.find(v => v.type === 'Teaser' && v.site === 'YouTube') ||
+          videos.find(v => v.type === 'Clip' && v.site === 'YouTube') ||
+          videos.find(v => v.site === 'YouTube');
+
+        if (trailer) return trailer.key; // Return just the key
       }
       return null;
     } catch (error) {
-      console.error("TMDB Trailer Error:", error.message);
+      if (error.code === 'ECONNABORTED' || !error.response) {
+        console.warn("TMDB API unreachable (Network/Timeout).");
+      } else {
+        console.error("TMDB Trailer Error:", error.message);
+      }
       return null;
     }
   }

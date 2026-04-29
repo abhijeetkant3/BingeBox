@@ -21,11 +21,13 @@ function MovieCard({ movie, onPlay, isLatest }) {
 
       {/* 1. MOVIE POSTER */}
       <img
-        src={movie?.Poster !== "N/A" ? movie?.Poster : "https://placehold.co/400x600?text=No+Poster"}
+        src={movie?.Poster && movie.Poster !== "N/A" ? movie.Poster : "https://placehold.co/400x600?text=No+Poster"}
         alt={movie?.Title}
+        loading="lazy"
         onError={(e) => { 
-          e.target.onerror = null; 
-          e.target.src = "https://placehold.co/400x600?text=Image+Not+Found"; 
+          if (e.target.src !== "https://placehold.co/400x600?text=Image+Not+Found") {
+            e.target.src = "https://placehold.co/400x600?text=Image+Not+Found";
+          }
         }}
         /* ✅ EDITED: Changed from h-[350px] to aspect-[2/3] for responsive height */
         className="w-full aspect-[2/3] object-cover transition duration-500 group-hover:opacity-40 group-hover:brightness-110"

@@ -17,6 +17,7 @@ function Navbar({ onSearch, onHomeClick, user }) {
   const searchInputRef = useRef(null);
   const mobileSearchInputRef = useRef(null);
   const searchContainerRef = useRef(null);
+  const dropdownSearchIconRef = useRef(null);
 
   // Close dropdown and search when clicking outside
   useEffect(() => {
@@ -122,6 +123,19 @@ function Navbar({ onSearch, onHomeClick, user }) {
     }
   };
 
+  const scrollToAnime = (e) => {
+    e?.preventDefault();
+    setIsDropdownOpen(false);
+    if (window.location.pathname === '/') {
+      const section = document.getElementById('anime-section');
+      if (section) {
+        section.scrollIntoView({ behavior: 'smooth' });
+      }
+    } else {
+      navigate('/#anime-section');
+    }
+  };
+
   const handleLogoHomeClick = (e) => {
     e?.preventDefault();
     setIsDropdownOpen(false);
@@ -133,6 +147,11 @@ function Navbar({ onSearch, onHomeClick, user }) {
     if (window.location.pathname !== '/') {
       navigate('/');
     }
+  };
+
+  const handleDropdownSearchClick = () => {
+    setIsSearchOpen(true);
+    setIsDropdownOpen(false);
   };
 
   const userInitial = user?.email?.[0]?.toUpperCase() || user?.displayName?.[0]?.toUpperCase() || "";
@@ -156,20 +175,24 @@ function Navbar({ onSearch, onHomeClick, user }) {
         {/* ADVANCED SEARCH INTERACTION */}
         <div 
           ref={searchContainerRef}
-          className={`relative flex items-center transition-[width] duration-300 ease-in-out ${isSearchOpen ? 'flex-grow sm:flex-none sm:w-80' : 'w-10'}`}
-          style={{ willChange: 'width' }}
+          className={`relative flex items-center transition-all duration-300 ease-in-out ${
+            isSearchOpen 
+              ? 'flex-grow sm:flex-none sm:w-80 opacity-100' 
+              : 'w-10 opacity-100'
+          }`}
+          style={{ willChange: 'width, opacity' }}
         >
           <div 
             className={`search-ring-container ${isSearchOpen ? 'active' : ''} transition-all duration-300 ease-out ${
-              isSearchOpen ? "scale-100 w-full" : "scale-95 w-10"
+              isSearchOpen ? "scale-100 w-full rounded-full" : "scale-95 w-10 rounded-full"
             }`}
             style={{ willChange: 'transform, width' }}
           >
             <form 
               onSubmit={handleSearchSubmit} 
-              className={`search-ring-inner group flex flex-row-reverse items-center transition-[width,background-color] duration-300 ease-out px-3 py-1.5 backdrop-blur-md overflow-hidden ${
+              className={`search-ring-inner group flex flex-row-reverse items-center transition-all duration-300 ease-out px-3 py-1.5 backdrop-blur-lg overflow-hidden rounded-full ${
                 isSearchOpen 
-                  ? "w-full bg-black/60 border border-white/10 shadow-xl" 
+                  ? "w-full bg-[#2b1f1f]/70 sm:bg-black/60 border border-white/10 shadow-xl" 
                   : "w-10 bg-transparent border-transparent"
               }`}
               style={{ willChange: 'width' }}
@@ -180,7 +203,7 @@ function Navbar({ onSearch, onHomeClick, user }) {
                   setIsSearchOpen(!isSearchOpen);
                   if (!isSearchOpen) setIsDropdownOpen(false); // Close dropdown when opening search
                 }} 
-                className={`text-gray-300 hover:text-white transition-transform duration-300 flex-shrink-0 ${isSearchOpen ? "rotate-90 scale-110" : "rotate-0 scale-100"}`}
+                className={`text-gray-300 hover:text-white transition-all duration-300 flex-shrink-0 flex items-center justify-center w-8 h-8 rounded-full hover:bg-white/10 ${isSearchOpen ? "rotate-90 scale-110" : "rotate-0 scale-100"}`}
               >
                 {isSearchOpen ? (
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -197,8 +220,8 @@ function Navbar({ onSearch, onHomeClick, user }) {
                 ref={searchInputRef}
                 type="text" 
                 placeholder="Search" 
-                className={`bg-transparent border-none outline-none text-sm mr-2 text-white placeholder-gray-500 transition-opacity duration-300 ease-in-out ${
-                  isSearchOpen ? "opacity-100 w-full visible" : "opacity-0 w-0 invisible pointer-events-none"
+                className={`bg-transparent border-none outline-none text-sm mr-2 text-white placeholder-gray-500 transition-all duration-300 ease-in-out ${
+                  isSearchOpen ? "opacity-100 w-full visible translate-x-0" : "opacity-0 w-0 invisible pointer-events-none translate-x-4"
                 }`}
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
@@ -208,22 +231,24 @@ function Navbar({ onSearch, onHomeClick, user }) {
 
           {/* SEARCH SUGGESTIONS */}
           {isSearchOpen && suggestions.length > 0 && (
-            <div className="absolute top-full right-0 mt-4 w-[calc(100vw-80px)] sm:w-80 bg-black/95 border border-white/10 rounded-2xl overflow-hidden backdrop-blur-3xl shadow-[0_20px_50px_rgba(0,0,0,0.9)] animate-fadeIn z-50">
-              {suggestions.map((movie) => (
-                <div 
-                  key={movie.imdbID} 
-                  onClick={() => handleSelectSuggestion(movie.imdbID)} 
-                  className="flex items-center gap-4 p-4 hover:bg-red-600/20 cursor-pointer transition-all duration-300 border-b border-white/5 last:border-none group/item"
-                >
-                  <div className="relative w-10 h-14 overflow-hidden rounded shadow-lg group-hover/item:scale-105 transition-transform duration-300">
-                    <img src={movie.Poster} alt="" className="w-full h-full object-cover" />
+            <div className="absolute top-full right-[-48px] sm:right-0 mt-4 w-[calc(100vw-110px)] sm:w-80 bg-[#2b1f1f]/70 sm:bg-black/95 backdrop-blur-lg sm:backdrop-blur-3xl border border-white/10 sm:border-red-600/30 rounded-2xl overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.8)] animate-fadeIn z-50">
+              <div className="relative z-10">
+                {suggestions.map((movie) => (
+                  <div 
+                    key={movie.imdbID} 
+                    onClick={() => handleSelectSuggestion(movie.imdbID)} 
+                    className="flex items-center gap-3 p-2.5 hover:bg-red-600/20 cursor-pointer transition-all duration-100 border-b border-white/5 last:border-none group/item"
+                  >
+                    <div className="relative w-8 h-11 overflow-hidden rounded shadow-lg group-hover/item:scale-105 transition-transform duration-100">
+                      <img src={movie.Poster} alt="" className="w-full h-full object-cover" />
+                    </div>
+                    <div className="flex flex-col overflow-hidden">
+                      <span className="text-xs font-bold text-white truncate group-hover/item:text-red-500 transition-colors duration-100">{movie.Title}</span>
+                      <span className="text-[9px] text-gray-500 mt-0.5">{movie.Year}</span>
+                    </div>
                   </div>
-                  <div className="flex flex-col overflow-hidden">
-                    <span className="text-xs font-bold text-white truncate group-hover/item:text-red-500 transition-colors duration-300">{movie.Title}</span>
-                    <span className="text-[10px] text-gray-500 mt-1">{movie.Year}</span>
-                  </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
           )}
         </div>
@@ -231,6 +256,7 @@ function Navbar({ onSearch, onHomeClick, user }) {
         {/* DESKTOP NAVIGATION */}
         <div className="hidden lg:flex items-center gap-8">
           <button onClick={handleLogoHomeClick} className="text-[11px] font-bold text-white hover:text-red-600 transition-all duration-300 tracking-widest uppercase hover:scale-110 active:scale-95">Home</button>
+          <button onClick={scrollToAnime} className="text-[11px] font-bold text-gray-400 hover:text-white transition-all duration-300 tracking-widest uppercase hover:scale-110 active:scale-95">Anime</button>
           {user && (
             <Link to="/mylist" className="text-[11px] font-bold text-gray-400 hover:text-white transition-all duration-300 tracking-widest uppercase hover:scale-110 active:scale-95">My List</Link>
           )}
@@ -268,6 +294,9 @@ function Navbar({ onSearch, onHomeClick, user }) {
                 <button onClick={handleLogoHomeClick} className="w-full flex items-center justify-start gap-2.5 px-5 py-3 text-xs font-bold text-white lg:text-gray-300 hover:bg-red-600/20 transition-all uppercase tracking-widest">
                    Home
                 </button>
+                <button onClick={scrollToAnime} className="w-full flex items-center justify-start gap-2.5 px-5 py-3 text-xs font-bold text-white lg:text-gray-300 hover:bg-red-600/20 transition-all uppercase tracking-widest">
+                   Anime
+                </button>
                 <button onClick={scrollToMovies} className="w-full flex items-center justify-start gap-2.5 px-5 py-3 text-xs font-bold text-white lg:text-gray-300 hover:bg-red-600/20 transition-all uppercase tracking-widest">
                    Movies
                 </button>
@@ -289,6 +318,18 @@ function Navbar({ onSearch, onHomeClick, user }) {
                   </div>
                   
                   <div className="py-1">
+                    {/* My List Option */}
+                    <Link 
+                      to="/mylist" 
+                      className="flex items-center justify-center sm:justify-start gap-3 px-5 py-3 text-xs font-bold text-gray-400 hover:text-white hover:bg-red-600/10 transition-colors uppercase tracking-widest group"
+                      onClick={() => setIsDropdownOpen(false)}
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-red-600/50 group-hover:text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
+                      </svg>
+                      My List
+                    </Link>
+
                     {/* Profile Link - Kept only for Tablet/Desktop */}
                     <Link to="/" className="hidden sm:flex items-center justify-start gap-3 px-5 py-3 text-xs font-bold text-gray-400 hover:text-white hover:bg-red-600/10 transition-colors uppercase tracking-widest group" onClick={handleLogoHomeClick}>
                       <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-red-600/50 group-hover:text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">

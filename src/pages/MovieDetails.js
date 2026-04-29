@@ -71,7 +71,7 @@ function MovieDetails() {
       <div 
         className="absolute inset-0 z-0"
         style={{
-          backgroundImage: `url(${movie.Poster})`,
+          backgroundImage: `url(${movie.Poster !== "N/A" ? movie.Poster : "https://placehold.co/1920x1080?text=Cinema"})`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           filter: 'blur(80px) brightness(0.3)',

@@ -192,7 +192,7 @@
 }
 
 .search-ring-container.active {
-  box-shadow: 0 0 20px rgba(161, 98, 7, 0.4);
+  box-shadow: 0 0 20px rgba(220, 38, 38, 0.4);
 }
 
 .search-ring-container::before {
@@ -204,11 +204,11 @@
   height: 200%;
   background: conic-gradient(
     transparent, 
-    #451a03, 
-    #ca8a04, 
-    #78350f, 
-    #facc15, 
-    #451a03,
+    #450a0a, 
+    #dc2626, 
+    #991b1b, 
+    #ef4444, 
+    #450a0a,
     transparent 30%
   );
   animation: rotate-rgb 4s linear infinite;
@@ -251,4 +251,19 @@
 
 @keyframes shimmer-swipe { to { transform: translateX(100%); } }
 @keyframes shimmer { 100% { transform: translateX(100%); } }
+
+/* Lightning Bolt Animation */
+@keyframes boltFast {
+  0%, 94%, 100% { opacity: 0; stroke-dasharray: 0 150; }
+  95% { opacity: 1; stroke-dasharray: 150 150; }
+  97% { opacity: 0.6; }
+  98% { opacity: 1; }
+  99% { opacity: 0; }
+}
+
+.animate-bolt-fast { 
+  animation: boltFast 5s linear infinite; 
+  stroke-linecap: round;
+  will-change: opacity, stroke-dasharray;
+}
 

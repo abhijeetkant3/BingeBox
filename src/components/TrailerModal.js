@@ -8,21 +8,14 @@ function TrailerModal({ show, onClose, movie }) {
   useEffect(() => {
     if (!show || !movie?.Title) return;
 
-    const fetchTrailer = async (title, year) => {
+    const fetchTrailer = async (id) => {
       setLoading(true);
       setVideoKey(""); 
       
       try {
-        const trailerUrl = await movieService.getTrailer(title, year);
+        const videoId = await movieService.getTrailer(id);
 
-        if (trailerUrl && typeof trailerUrl === 'string') {
-          // Robust extraction of video ID
-          let videoId = "";
-          if (trailerUrl.includes('v=')) {
-            videoId = trailerUrl.split('v=')[1].split('&')[0];
-          } else {
-            videoId = trailerUrl.split('/').pop();
-          }
+        if (videoId) {
           setVideoKey(videoId);
         } else {
           setVideoKey("NOT_FOUND");
@@ -35,8 +28,8 @@ function TrailerModal({ show, onClose, movie }) {
       }
     };
 
-    fetchTrailer(movie.Title, movie.Year);
-  }, [movie?.Title, movie?.Year, show]);
+    fetchTrailer(movie.imdbID);
+  }, [movie?.imdbID, show]);
 
   if (!show || !movie) return null;
 

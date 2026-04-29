@@ -13,6 +13,7 @@ import TrailerModal from "./components/TrailerModal";
 import LightningStrike from "./components/LightningStrike";
 import MovieSkeleton from "./components/MovieSkeleton";
 import Hero from "./components/Hero";
+import Footer from "./components/Footer";
 
 import { movieService } from "./services/movieService";
 
@@ -24,6 +25,7 @@ function Home({ user }) {
   const [trending, setTrending] = useState([]);
   const [actionMovies, setActionMovies] = useState([]);
   const [comedyMovies, setComedyMovies] = useState([]);
+  const [animeMovies, setAnimeMovies] = useState([]);
   
   // --- SEARCH STATES ---
   const [searchResults, setSearchResults] = useState([]);
@@ -43,22 +45,48 @@ function Home({ user }) {
     const fetchAllRows = async () => {
       setLoading(true);
       try {
-        const [resLatest, res1, res2, res3] = await Promise.all([
+        const [resLatest, res1, res2, res3, anime1, anime2, anime3, anime4, anime5, anime6, anime7] = await Promise.all([
           movieService.searchMovies("Marvel"),
           movieService.searchMovies("Batman"),
           movieService.searchMovies("Avengers"),
-          movieService.searchMovies("Comedy")
+          movieService.searchMovies("Comedy"),
+          movieService.searchMovies("One Piece"),
+          movieService.searchMovies("Demon Slayer"),
+          movieService.searchMovies("Attack on Titan"),
+          movieService.searchMovies("Naruto"),
+          movieService.searchMovies("Death Note"),
+          movieService.searchMovies("Jujutsu Kaisen"),
+          movieService.searchMovies("Dragon Ball Z")
         ]);
 
         const latest = resLatest?.Search || [];
         const trendingData = res1?.Search || [];
         const actionData = res2?.Search || [];
         const comedyData = res3?.Search || [];
+        
+        // Take the top 1-2 most relevant items from each search to ensure variety
+        const combinedAnime = [
+          ...(anime1?.Search?.slice(0, 2) || []),
+          ...(anime2?.Search?.slice(0, 2) || []),
+          ...(anime3?.Search?.slice(0, 2) || []),
+          ...(anime4?.Search?.slice(0, 2) || []),
+          ...(anime5?.Search?.slice(0, 2) || []),
+          ...(anime6?.Search?.slice(0, 2) || []),
+          ...(anime7?.Search?.slice(0, 1) || [])
+        ];
+        
+        // Deduplicate and limit to 10
+        const uniqueAnime = combinedAnime
+          .filter((item, index, self) =>
+            index === self.findIndex((t) => t.imdbID === item.imdbID)
+          )
+          .slice(0, 10);
 
         setLatestMovies(latest);
         setTrending(trendingData);
         setActionMovies(actionData);
         setComedyMovies(comedyData);
+        setAnimeMovies(uniqueAnime);
         
         if (latest.length > 0) {
           setSelectedMovie(latest[0]);
@@ -149,7 +177,7 @@ function Home({ user }) {
     return (
       <div className="min-h-screen bg-black flex flex-col items-center justify-center p-10">
         <h2 className="text-2xl font-bold mb-8 animate-pulse text-red-600">Loading Cinema Magic...</h2>
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-6 w-full max-w-7xl">
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-10 w-full max-w-7xl">
           {[...Array(5)].map((_, i) => <MovieSkeleton key={i} />)}
         </div>
       </div>
@@ -160,9 +188,11 @@ function Home({ user }) {
     <>
       <Navbar onSearch={handleNavbarSearch} onHomeClick={handleResetHome} user={user} />
 
-      {!loading && !isSearching && latestMovies?.length > 0 && (
-        <Hero key={selectedMovie?.imdbID} movie={selectedMovie} onPlay={handlePlayTrailer} />
-      )}
+      <div className="pt-20">
+        {!loading && !isSearching && latestMovies?.length > 0 && (
+          <Hero key={selectedMovie?.imdbID} movie={selectedMovie} onPlay={handlePlayTrailer} />
+        )}
+      </div>
 
       <div 
         className="fixed inset-0 -z-30 opacity-20 bg-cover bg-center transition-all duration-1000 grayscale-[40%]"
@@ -178,7 +208,7 @@ function Home({ user }) {
           {isSearching ? (
             <div className="animate-fadeZoom mt-20">
               <h2 className="text-3xl font-bold mb-8 tracking-tighter">Search Results</h2>
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-8">
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-10">
                 {loading ? (
                   [...Array(10)].map((_, i) => <MovieSkeleton key={i} />)
                 ) : (
@@ -191,6 +221,7 @@ function Home({ user }) {
           ) : (
             <div id="movie-section" className="animate-fadeZoom space-y-16 mt-20">
               <MovieRow key="latest-row" title="Latest Releases" movies={latestMovies} onPlay={handlePlayTrailer} loading={loading} isLatest={true} />
+              <MovieRow key="anime-row" id="anime-section" title="Anime Universe" movies={animeMovies} onPlay={handlePlayTrailer} loading={loading} />
               <MovieRow key="trending-row" title="Trending Now" movies={trending} onPlay={handlePlayTrailer} loading={loading} />
               <MovieRow key="action-row" title="Action Blockbusters" movies={actionMovies} onPlay={handlePlayTrailer} loading={loading} />
               <MovieRow key="comedy-row" title="Laughter Therapy" movies={comedyMovies} onPlay={handlePlayTrailer} loading={loading} />
@@ -206,6 +237,7 @@ function Home({ user }) {
           movie={selectedMovie}
         />
       )}
+      <Footer />
     </>
   );
 }

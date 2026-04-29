@@ -58,21 +58,6 @@ const ThunderConvergence = memo(({ children }) => {
       <div className="relative z-10" style={{ transform: 'translateZ(0)' }}>
         {children}
       </div>
-
-      <style dangerouslySetInnerHTML={{ __html: `
-        @keyframes boltFast {
-          0%, 94%, 100% { opacity: 0; stroke-dasharray: 0 150; }
-          95% { opacity: 1; stroke-dasharray: 150 150; }
-          97% { opacity: 0.6; }
-          98% { opacity: 1; }
-          99% { opacity: 0; }
-        }
-        .animate-bolt-fast { 
-          animation: boltFast 5s linear infinite; 
-          stroke-linecap: round;
-          will-change: opacity, stroke-dasharray;
-        }
-      `}} />
     </div>
   );
 });
