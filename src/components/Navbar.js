@@ -149,11 +149,6 @@ function Navbar({ onSearch, onHomeClick, user }) {
     }
   };
 
-  const handleDropdownSearchClick = () => {
-    setIsSearchOpen(true);
-    setIsDropdownOpen(false);
-  };
-
   const userInitial = user?.email?.[0]?.toUpperCase() || user?.displayName?.[0]?.toUpperCase() || "";
 
   return (
