@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 /**
  * Footer Component: A reusable, responsive, and cinematically styled footer.
@@ -36,24 +37,24 @@ const Footer = () => {
             <h3 className="text-white font-black text-xs uppercase tracking-[0.3em] mb-8">Explore</h3>
             <ul className="flex flex-col gap-4">
               <li>
-                <a href="#" className="text-gray-400 hover:text-red-500 transition-colors duration-300 text-xs font-bold uppercase tracking-widest active:scale-95 inline-block">
+                <Link to="/" className="text-gray-400 hover:text-red-500 transition-colors duration-300 text-xs font-bold uppercase tracking-widest active:scale-95 inline-block">
                   Home
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className="text-gray-400 hover:text-red-500 transition-colors duration-300 text-xs font-bold uppercase tracking-widest active:scale-95 inline-block">
+                <Link to="/" className="text-gray-400 hover:text-red-500 transition-colors duration-300 text-xs font-bold uppercase tracking-widest active:scale-95 inline-block">
                   Movies
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className="text-gray-400 hover:text-red-500 transition-colors duration-300 text-xs font-bold uppercase tracking-widest active:scale-95 inline-block">
+                <Link to="/" className="text-gray-400 hover:text-red-500 transition-colors duration-300 text-xs font-bold uppercase tracking-widest active:scale-95 inline-block">
                   TV Shows
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className="text-gray-400 hover:text-red-500 transition-colors duration-300 text-xs font-bold uppercase tracking-widest active:scale-95 inline-block">
+                <Link to="/" className="text-gray-400 hover:text-red-500 transition-colors duration-300 text-xs font-bold uppercase tracking-widest active:scale-95 inline-block">
                   Latest
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
@@ -63,24 +64,24 @@ const Footer = () => {
             <h3 className="text-white font-black text-xs uppercase tracking-[0.3em] mb-8">Support</h3>
             <ul className="flex flex-col gap-4">
               <li>
-                <a href="#" className="text-gray-400 hover:text-red-500 transition-colors duration-300 text-xs font-bold uppercase tracking-widest active:scale-95 inline-block">
+                <Link to="/signin" className="text-gray-400 hover:text-red-500 transition-colors duration-300 text-xs font-bold uppercase tracking-widest active:scale-95 inline-block">
                   Account
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className="text-gray-400 hover:text-red-500 transition-colors duration-300 text-xs font-bold uppercase tracking-widest active:scale-95 inline-block">
+                <Link to="/" className="text-gray-400 hover:text-red-500 transition-colors duration-300 text-xs font-bold uppercase tracking-widest active:scale-95 inline-block">
                   Contact
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className="text-gray-400 hover:text-red-500 transition-colors duration-300 text-xs font-bold uppercase tracking-widest active:scale-95 inline-block">
+                <Link to="/" className="text-gray-400 hover:text-red-500 transition-colors duration-300 text-xs font-bold uppercase tracking-widest active:scale-95 inline-block">
                   Supported Devices
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className="text-gray-400 hover:text-red-500 transition-colors duration-300 text-xs font-bold uppercase tracking-widest active:scale-95 inline-block">
+                <Link to="/" className="text-gray-400 hover:text-red-500 transition-colors duration-300 text-xs font-bold uppercase tracking-widest active:scale-95 inline-block">
                   Terms of Use
-                </a>
+                </Link>
               </li>
             </ul>
           </div>

@@ -34,7 +34,7 @@ function SearchBar({ onSearch }) {
         <input
           type="text"
           placeholder="Search movies..."
-          className="w-full bg-white/5 backdrop-blur-md border border-white/10 text-white pl-12 pr-6 py-2 rounded-full outline-none focus:ring-1 focus:ring-red-500/50 transition-all duration-300 placeholder:text-gray-500 text-sm shadow-2xl"
+          className="w-full bg-white/5 backdrop-blur-md border border-white/10 text-white pl-12 pr-6 py-1.5 rounded-full outline-none focus:ring-1 focus:ring-red-500/50 transition-all duration-300 placeholder:text-gray-500 text-sm shadow-2xl"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           onKeyDown={handleKeyDown}

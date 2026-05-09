@@ -1,5 +1,4 @@
 import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
 import { getAuth } from "firebase/auth"; // Added for your Signup/Login logic
 import { getFirestore } from "firebase/firestore"; // Added if you decide to save data later
 
@@ -17,7 +16,6 @@ console.log("Firebase Initializing with API Key:", firebaseConfig.apiKey ? "Pres
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
 
 // Export services to use them in your components
 export const auth = getAuth(app);

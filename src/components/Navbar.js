@@ -18,7 +18,6 @@ function Navbar({ onSearch, onHomeClick, user }) {
   const searchInputRef = useRef(null);
   const mobileSearchInputRef = useRef(null);
   const searchContainerRef = useRef(null);
-  const dropdownSearchIconRef = useRef(null);
 
   // Close dropdown and search when clicking outside
   useEffect(() => {
@@ -191,7 +190,7 @@ function Navbar({ onSearch, onHomeClick, user }) {
           >
             <form 
               onSubmit={handleSearchSubmit} 
-              className={`search-ring-inner group flex flex-row-reverse items-center transition-all duration-300 ease-out px-3 py-1.5 backdrop-blur-lg overflow-hidden rounded-full ${
+              className={`search-ring-inner group flex flex-row-reverse items-center transition-all duration-300 ease-out px-3 py-1 backdrop-blur-lg overflow-hidden rounded-full ${
                 isSearchOpen 
                   ? "w-full bg-[#2b1f1f]/70 sm:bg-black/60 border border-white/10 shadow-xl" 
                   : "w-10 bg-transparent border-transparent"

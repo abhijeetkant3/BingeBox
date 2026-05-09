@@ -4,14 +4,13 @@ import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "./firebase";
 
 import Navbar from "./components/Navbar";
-import MovieRow from "./components/MovieRow"; 
+import ParallaxMovieGrid, { MovieCard, MovieSkeleton } from "./components/ParallaxMovieGrid";
 import MovieDetails from "./pages/MovieDetails";
 import Signup from "./pages/Signup";
 import Signin from "./pages/Signin";
 import MyList from "./pages/MyList";
 import TrailerModal from "./components/TrailerModal";
 import LightningStrike from "./components/LightningStrike";
-import MovieSkeleton from "./components/MovieSkeleton";
 import Hero from "./components/Hero";
 import Footer from "./components/Footer";
 
@@ -213,18 +212,52 @@ function Home({ user }) {
                   [...Array(10)].map((_, i) => <MovieSkeleton key={i} />)
                 ) : (
                   searchResults?.map((movie, index) => (
-                    <MovieRow.Card key={`${movie.imdbID}-${index}`} movie={movie} onPlay={handlePlayTrailer} />
+                    <MovieCard key={`${movie.imdbID}-${index}`} movie={movie} onPlay={handlePlayTrailer} />
                   ))
                 )}
               </div>
             </div>
           ) : (
             <div id="movie-section" className="animate-fadeZoom space-y-16 mt-20">
-              <MovieRow key="latest-row" title="Latest Releases" movies={latestMovies} onPlay={handlePlayTrailer} loading={loading} isLatest={true} />
-              <MovieRow key="anime-row" id="anime-section" title="Anime Universe" movies={animeMovies} onPlay={handlePlayTrailer} loading={loading} />
-              <MovieRow key="trending-row" title="Trending Now" movies={trending} onPlay={handlePlayTrailer} loading={loading} />
-              <MovieRow key="action-row" title="Action Blockbusters" movies={actionMovies} onPlay={handlePlayTrailer} loading={loading} />
-              <MovieRow key="comedy-row" title="Laughter Therapy" movies={comedyMovies} onPlay={handlePlayTrailer} loading={loading} />
+              <section>
+                <div className="flex items-center gap-3 mb-6 px-2">
+                  <div className="w-1 h-6 bg-red-600 rounded-full" />
+                  <h2 className="text-xl md:text-2xl font-bold text-white tracking-tight uppercase">Latest Releases</h2>
+                </div>
+                <ParallaxMovieGrid movies={latestMovies} loading={loading} onPlay={handlePlayTrailer} />
+              </section>
+
+              <section id="anime-section">
+                <div className="flex items-center gap-3 mb-6 px-2">
+                  <div className="w-1 h-6 bg-red-600 rounded-full" />
+                  <h2 className="text-xl md:text-2xl font-bold text-white tracking-tight uppercase">Anime Universe</h2>
+                </div>
+                <ParallaxMovieGrid movies={animeMovies} loading={loading} onPlay={handlePlayTrailer} />
+              </section>
+
+              <section>
+                <div className="flex items-center gap-3 mb-6 px-2">
+                  <div className="w-1 h-6 bg-red-600 rounded-full" />
+                  <h2 className="text-xl md:text-2xl font-bold text-white tracking-tight uppercase">Trending Now</h2>
+                </div>
+                <ParallaxMovieGrid movies={trending} loading={loading} onPlay={handlePlayTrailer} />
+              </section>
+
+              <section>
+                <div className="flex items-center gap-3 mb-6 px-2">
+                  <div className="w-1 h-6 bg-red-600 rounded-full" />
+                  <h2 className="text-xl md:text-2xl font-bold text-white tracking-tight uppercase">Action Blockbusters</h2>
+                </div>
+                <ParallaxMovieGrid movies={actionMovies} loading={loading} onPlay={handlePlayTrailer} />
+              </section>
+
+              <section>
+                <div className="flex items-center gap-3 mb-6 px-2">
+                  <div className="w-1 h-6 bg-red-600 rounded-full" />
+                  <h2 className="text-xl md:text-2xl font-bold text-white tracking-tight uppercase">Laughter Therapy</h2>
+                </div>
+                <ParallaxMovieGrid movies={comedyMovies} loading={loading} onPlay={handlePlayTrailer} />
+              </section>
             </div>
           )}
         </main>

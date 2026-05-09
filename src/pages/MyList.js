@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { watchlistService } from "../services/watchlistService";
-import MovieRow from "../components/MovieRow";
+import { MovieCard } from "../components/ParallaxMovieGrid";
 import { auth } from "../firebase";
 import { onAuthStateChanged } from "firebase/auth";
 
@@ -96,7 +96,7 @@ function MyList() {
         ) : (
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-x-6 gap-y-10 animate-fadeZoom">
             {movies.map((movie) => (
-              <MovieRow.Card 
+              <MovieCard 
                 key={movie.imdbID} 
                 movie={movie} 
                 onPlay={(m) => navigate(`/movie/${m.imdbID}`)} 

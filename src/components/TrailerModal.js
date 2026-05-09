@@ -29,7 +29,7 @@ function TrailerModal({ show, onClose, movie }) {
     };
 
     fetchTrailer(movie.imdbID);
-  }, [movie?.imdbID, show]);
+  }, [movie?.imdbID, movie?.Title, show]);
 
   if (!show || !movie) return null;
 
